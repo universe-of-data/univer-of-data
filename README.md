@@ -3,3 +3,12 @@
 Hey there! **I'm Rakshitha Guntakandla**, a data enthusiast and dreamer. 🌍 Passionate about using data to make the world a better place, through continuous learning and exploration. I'm certified in Azure and love experimenting with different datasets and innovative approaches. 
 
 Let's connect and explore new possibilities together!
+
+# My Content
+
+- [LinkedIn Profile](https://www.linkedin.com/in/kandla/)
+- [Twitter Stream](https://x.com/Universeof_data)
+  
+
+
+
