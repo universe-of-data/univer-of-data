@@ -1,0 +1,97 @@
+{
+	"name": "Pipeline 1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "CosmosDbSqlApiSink",
+						"writeBehavior": "insert"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "StoreID",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "StoreID"
+								}
+							},
+							{
+								"source": {
+									"name": "StoreName",
+									"type": "String"
+								},
+								"sink": {
+									"path": "StoreName"
+								}
+							},
+							{
+								"source": {
+									"name": "Location",
+									"type": "String"
+								},
+								"sink": {
+									"path": "Location"
+								}
+							},
+							{
+								"source": {
+									"name": "Manager",
+									"type": "String"
+								},
+								"sink": {
+									"path": "Manager"
+								}
+							},
+							{
+								"source": {
+									"name": "OpeningDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"path": "OpeningDate"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "CosmosDbNoSqlContainer3",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-07-21T21:42:46Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

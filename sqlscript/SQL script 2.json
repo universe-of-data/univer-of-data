@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 2",
+	"properties": {
+		"content": {
+			"query": "\n-- Create Product Dimension Table with Nonclustered Primary Key\nCREATE TABLE staggingProduct\n(\n    ProductID INT NOT NULL,\n    ProductName NVARCHAR(100),\n    Category NVARCHAR(50),\n    Price DECIMAL(10, 2),\n    SupplierID INT\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN\n);\n\n-- Create Customer Dimension Table with Nonclustered Primary Key\nCREATE TABLE staggingCustomer\n(\n    CustomerID INT NOT NULL,\n    CustomerName NVARCHAR(100),\n    Gender NVARCHAR(10),\n    Age INT,\n    Region NVARCHAR(50),\n    LoyaltyCardID NVARCHAR(20)\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN\n);\n\n-- Create Time Dimension Table with Nonclustered Primary Key\nCREATE TABLE staggingTime\n(\n    TimeID INT NOT NULL,\n    Date DATE,\n    Month INT,\n    Quarter INT,\n    Year INT,\n    Weekday NVARCHAR(10)\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN\n);\n\n-- Create Store Dimension Table with Nonclustered Primary Key\nCREATE TABLE staggingStore\n(\n    StoreID INT NOT NULL,\n    StoreName NVARCHAR(100),\n    Location NVARCHAR(100),\n    Manager NVARCHAR(100),\n    OpeningDate DATE\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN\n);\n\n-- Create Sales Fact Table with Nonclustered Primary Key \n-- Primary Keys: Use PRIMARY KEY NONCLUSTERED to define nonclustered primary keys. \n-- This approach acknowledges the constraint without enforcing it during data operations.\nCREATE TABLE staggingSales\n(\n    SalesID INT NOT NULL,\n    ProductID INT,\n    CustomerID INT,\n    TimeID INT,\n    StoreID INT,\n    QuantitySold INT,\n    SalesAmount DECIMAL(10, 2),\n    SalesDate DATE\n)\nWITH\n(\n    DISTRIBUTION = HASH(ProductID)\n);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

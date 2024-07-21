@@ -1,0 +1,106 @@
+{
+	"name": "cosmosToTimeStagging",
+	"properties": {
+		"activities": [
+			{
+				"name": "cosmosToTimeStagging",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "CosmosDbSqlApiSource",
+						"preferredRegions": []
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"writeBehavior": "Insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['TimeID']"
+								},
+								"sink": {
+									"name": "TimeID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Date']"
+								},
+								"sink": {
+									"name": "Date",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Month']"
+								},
+								"sink": {
+									"name": "Month",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Quarter']"
+								},
+								"sink": {
+									"name": "Quarter",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Year']"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Weekday']"
+								},
+								"sink": {
+									"name": "Weekday",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "CosmosDbNoSqlContainer3",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SqlPoolTable1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-07-21T21:42:59Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

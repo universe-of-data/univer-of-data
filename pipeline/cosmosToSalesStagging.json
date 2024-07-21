@@ -1,0 +1,125 @@
+{
+	"name": "cosmosToSalesStagging",
+	"properties": {
+		"activities": [
+			{
+				"name": "cosmosToStagging",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "CosmosDbSqlApiSource",
+						"query": "select * from c\n\n",
+						"preferredRegions": []
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"writeBehavior": "Insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['SalesID']"
+								},
+								"sink": {
+									"name": "SalesID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['ProductID']"
+								},
+								"sink": {
+									"name": "ProductID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['CustomerID']"
+								},
+								"sink": {
+									"name": "CustomerID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['TimeID']"
+								},
+								"sink": {
+									"name": "TimeID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['StoreID']"
+								},
+								"sink": {
+									"name": "StoreID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['QuantitySold']"
+								},
+								"sink": {
+									"name": "QuantitySold",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['SalesAmount']"
+								},
+								"sink": {
+									"name": "SalesAmount",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"path": "$['SalesDate']"
+								},
+								"sink": {
+									"name": "SalesDate",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "CosmosDbNoSqlContainer1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SqlPoolTable1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-07-21T21:42:40Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

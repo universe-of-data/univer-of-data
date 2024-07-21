@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 9",
+	"properties": {
+		"content": {
+			"query": "/*\nTo ensure data quality and handle errors during the ETL process, you can implement various transformations and checks. Here are some additional examples of transformations, data quality checks, and error handling mechanisms that you can incorporate into your ETL process:\n\nData Cleaning\n1. Remove Duplicates:\nEnsure that there are no duplicate records in the staging tables.\n\n2. Standardize Data Formats:\nStandardize the format of data to ensure consistency.\n\n*/\n\n-- Remove duplicates from Staging_Product\nDELETE FROM staggingSales\nWHERE ProductID IN (\n    SELECT ProductID\n    FROM (\n        SELECT ProductID, ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY (SELECT NULL)) AS RowNum\n        FROM staggingSales\n    ) AS TempTable\n    WHERE RowNum > 1\n);\n\n-- Standardize the format of phone numbers in Staging_Customer\n\n-- Add a new column for formatted date if it doesn't exist\nALTER TABLE dbo.staggingTime ADD FormattedDate NVARCHAR(20);\n\n-- Update the new column with formatted dates\nUPDATE dbo.staggingTime\nSET FormattedDate = FORMAT(Date, 'dd-MMM-yyyy');  -- Format: '14-May-2024'\n\nSELECT * FROM dbo.staggingTime\n\n--------------------------------------------------------------------------------------------------------------------------\n\n/*\nData Transformation\n1. Calculations:\nAdd new columns based on calculations or transformations.\n\n2. Date Transformations:\nExtract and transform date components.\n\n*/\n\n-- Add a new column for DiscountedPrice in Staging_Product\nALTER TABLE dbo.staggingProduct ADD DiscountedPrice DECIMAL(10, 2);\nUPDATE dbo.staggingProduct\nSET DiscountedPrice = Price * 0.9;  -- Apply a 10% discount\n\n-- Extract year and month from SalesDate in Staging_Sales\nALTER TABLE dbo.staggingSales ADD Year INT, Month INT;\nUPDATE dbo.staggingSales\nSET Year = YEAR(SalesDate), Month = MONTH(SalesDate);\n\n------------------------------------------------------------------------------------------------------------------------------------\n\n/*\nData Quality Checks\n\n1. Check for Null Values:\nIdentify and handle null values in important columns.\n\n2. Check for Data Consistency:\nEnsure that foreign key relationships are consistent.\n\n*/\n\n-- 1. Check for null ProductID in Staging_Sales\nSELECT * FROM Staging_Sales\nWHERE ProductID IS NULL;\n\n-- Handle null values by setting a default value or moving to an error table\nUPDATE Staging_Sales\nSET ProductID = -1  -- Assuming -1 is a default value for unknown products\nWHERE ProductID IS NULL;\n\n-- 2. Check for invalid ProductID in Staging_Sales\nSELECT * FROM Staging_Sales\nWHERE ProductID NOT IN (SELECT ProductID FROM Product);\n\n-- Handle inconsistent data by logging or moving to an error table\nINSERT INTO ErrorLog (TableName, ErrorDescription, RecordID)\nSELECT 'Staging_Sales', 'Invalid ProductID', SalesID\nFROM Staging_Sales\nWHERE ProductID NOT IN (SELECT ProductID FROM Product);\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 10",
+	"properties": {
+		"content": {
+			"query": "drop table dbo.ErrorLog\n\n-- Create the ErrorLog table without a default constraint on ErrorTimestamp\nCREATE TABLE ErrorLog\n(\n    ErrorID INT IDENTITY(1,1),\n    TableName NVARCHAR(50),\n    ErrorDescription NVARCHAR(250),\n    RecordID INT,\n    ErrorTimestamp DATETIME  -- Removed DEFAULT GETDATE() constraint\n);\n\n-- Check for invalid ProductID in Staging_Sales\nSELECT * FROM staggingSales\nWHERE ProductID NOT IN (SELECT ProductID FROM staggingProduct);\n\n-- Handle inconsistent data by logging or moving to an error table\nINSERT INTO ErrorLog (TableName, ErrorDescription, RecordID, ErrorTimestamp)\nSELECT 'dbo.staggingSales', 'Invalid ProductID', SalesID, GETDATE()  -- Explicitly include GETDATE() for ErrorTimestamp\nFROM staggingSales\nWHERE ProductID NOT IN (SELECT ProductID FROM staggingProduct);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

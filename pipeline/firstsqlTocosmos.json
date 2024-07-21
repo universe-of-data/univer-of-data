@@ -1,0 +1,124 @@
+{
+	"name": "firstsqlTocosmos",
+	"properties": {
+		"activities": [
+			{
+				"name": "sqlTocosmosdb",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "CosmosDbSqlApiSink",
+						"writeBehavior": "insert"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "SalesID",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "SalesID"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductID",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "ProductID"
+								}
+							},
+							{
+								"source": {
+									"name": "CustomerID",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "CustomerID"
+								}
+							},
+							{
+								"source": {
+									"name": "TimeID",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "TimeID"
+								}
+							},
+							{
+								"source": {
+									"name": "StoreID",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "StoreID"
+								}
+							},
+							{
+								"source": {
+									"name": "QuantitySold",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "QuantitySold"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesAmount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"path": "SalesAmount"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"path": "SalesDate"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "CosmosDbNoSqlContainer2",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-07-21T21:40:34Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
