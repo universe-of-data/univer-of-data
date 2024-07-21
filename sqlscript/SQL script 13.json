@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 13",
+	"properties": {
+		"content": {
+			"query": "/*Retry Mechanism:\nImplement a retry mechanism for transient errors.\n*/\n\n-- Declare variables for retry mechanism\nDECLARE @RetryCount INT = 0;\nDECLARE @MaxRetries INT = 3;\nDECLARE @Success BIT = 0;\n\n-- Start retry loop\nWHILE @RetryCount < @MaxRetries AND @Success = 0\nBEGIN\n    BEGIN TRY\n        -- Perform ETL operations\n        INSERT INTO Product (ProductID, ProductName, Category, Price, SupplierID)\n        SELECT DISTINCT ProductID, ProductName, Category, Price, SupplierID\n        FROM Staging_Product;\n\n        -- If the operation succeeds, set @Success to 1\n        SET @Success = 1;\n    END TRY\n    BEGIN CATCH\n        -- Increment the retry count\n        SET @RetryCount = @RetryCount + 1;\n\n        -- Log the error for analysis\n        INSERT INTO ErrorLog (TableName, ErrorDescription, RecordID)\n        VALUES ('ETL Process', ERROR_MESSAGE(), NULL);\n\n        -- Wait before the next retry attempt\n        WAITFOR DELAY '00:00:10';  -- Wait for 10 seconds\n\n        -- Optionally, handle specific errors or perform cleanup tasks here\n    END CATCH;\nEND;\n\n-- Optionally, handle the scenario when maximum retries are reached\nIF @Success = 0\nBEGIN\n    INSERT INTO ErrorLog (TableName, ErrorDescription, RecordID)\n    VALUES ('ETL Process', 'Maximum retry attempts reached', NULL);\nEND;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 12",
+	"properties": {
+		"content": {
+			"query": "/*Error Handling Mechanisms\nError Logging:\nCreate an error log table to capture and log errors during the ETL process.\n\nTransaction Management:\nUse transactions to ensure data integrity during the ETL process.\n\n*/\n-- Example of logging an error\nINSERT INTO ErrorLog (TableName, ErrorDescription, RecordID)\nVALUES ('staggingSales', 'Null ProductID', 12345);  -- Assuming 12345 is the SalesID with the error\n\n\n-- Example of using a transaction in ETL\nBEGIN TRANSACTION;\n\nBEGIN TRY\n    -- Perform ETL operations\n    INSERT INTO dbo.Product (ProductID, ProductName, Category, Price, SupplierID)\n    SELECT DISTINCT ProductID, ProductName, Category, Price, SupplierID\n    FROM staggingProduct;\n\n    INSERT INTO Customer (CustomerID, CustomerName, Gender, Age, Region, LoyaltyCardID)\n    SELECT DISTINCT CustomerID, CustomerName, Gender, Age, Region, LoyaltyCardID\n    FROM staggingCustomer;\n\n    -- If all operations succeed, commit the transaction\n    COMMIT TRANSACTION;\nEND TRY\nBEGIN CATCH\n    -- If an error occurs, rollback the transaction\n    ROLLBACK TRANSACTION;\n\n    -- Log the error\n    INSERT INTO ErrorLog (TableName, ErrorDescription, RecordID)\n    VALUES ('ETL Process', ERROR_MESSAGE(), NULL);\nEND CATCH;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
