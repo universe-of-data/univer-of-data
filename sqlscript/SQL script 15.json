@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 15",
+	"properties": {
+		"content": {
+			"query": "-- Example of retry mechanism using a loop\nDECLARE @RetryCount INT = 0;\nDECLARE @MaxRetries INT = 3;\nDECLARE @Success BIT = 0;\nDECLARE @ErrorMessage NVARCHAR(4000);\n\nWHILE @RetryCount < @MaxRetries AND @Success = 0\nBEGIN\n    BEGIN TRANSACTION;\n    BEGIN TRY\n        -- Perform ETL operations\n        INSERT INTO Product (ProductID, ProductName, Category, Price, SupplierID)\n        SELECT DISTINCT ProductID, ProductName, Category, Price, SupplierID\n        FROM Staging_Product;\n\n        -- If the operation succeeds, commit the transaction and set @Success to 1\n        COMMIT TRANSACTION;\n        SET @Success = 1;\n    END TRY\n    BEGIN CATCH\n        -- Rollback the transaction on error\n        ROLLBACK TRANSACTION;\n\n        -- Increment the retry count\n        SET @RetryCount = @RetryCount + 1;\n\n        -- Capture the error message\n        SET @ErrorMessage = ERROR_MESSAGE();\n\n        -- Log the error\n        INSERT INTO ErrorLog (TableName, ErrorDescription, RecordID)\n        VALUES ('ETL Process', @ErrorMessage, NULL);\n\n        -- Pause execution for a short time if there are more retries left\n        IF @RetryCount < @MaxRetries\n        BEGIN\n            WAITFOR DELAY '00:00:10';  -- Wait for 10 seconds before retrying\n        END\n    END CATCH;\nEND;\n\n-- Optional: Handle cases where the maximum retry limit is reached\nIF @RetryCount >= @MaxRetries\nBEGIN\n    -- Optionally log or handle final failure case\n    -- Example:\n    -- INSERT INTO ErrorLog (TableName, ErrorDescription, RecordID)\n    -- VALUES ('ETL Process', 'Maximum retry limit reached', NULL);\nEND;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

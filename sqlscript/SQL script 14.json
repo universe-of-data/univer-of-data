@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 14",
+	"properties": {
+		"content": {
+			"query": "DECLARE @retry INT;\nSET @retry = 1;\n\nWHILE (@retry <= 3)\nBEGIN\n    BEGIN TRY\n        -- Your T-SQL code here\n        BREAK; -- If successful, break the loop\n    END TRY\n    BEGIN CATCH\n        -- Error handling code\n        PRINT 'Attempt ' + CAST(@retry AS VARCHAR) + ': An error occurred: ' + ERROR_MESSAGE();\n        SET @retry = @retry + 1; -- Increment the retry count\n    END CATCH\nEND\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
