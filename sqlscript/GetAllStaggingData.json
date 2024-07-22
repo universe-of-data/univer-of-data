@@ -1,8 +1,8 @@
 {
-	"name": "SQL script 8",
+	"name": "GetAllStaggingData",
 	"properties": {
 		"content": {
-			"query": "SELECT * from staggingSales\nSELECT * from staggingCustomer\nSELECT * from staggingProduct\nSELECT * from staggingStore\nSELECT * from staggingTime",
+			"query": "--Script will give the stagging tables data\nSELECT * from staggingSales\nSELECT * from staggingCustomer\nSELECT * from staggingProduct\nSELECT * from staggingStore\nSELECT * from staggingTime",
 			"metadata": {
 				"language": "sql"
 			},
