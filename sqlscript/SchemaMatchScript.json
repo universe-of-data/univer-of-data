@@ -1,0 +1,17 @@
+{
+	"name": "SchemaMatchScript",
+	"properties": {
+		"content": {
+			"query": "\nselect * from Time\nselect * from staggingTime\n\n\n-- Alter the table to add new columns\nALTER TABLE dbo.Time\nADD FormattedDate Time\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

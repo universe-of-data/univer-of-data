@@ -1,0 +1,17 @@
+{
+	"name": "LoadStagToFinalStar",
+	"properties": {
+		"content": {
+			"query": "-- Loading data from stagging to final star tables\n\nINSERT INTO dbo.Sales\nSELECT *\nFROM staggingSales;\n\n\nINSERT INTO dbo.Customer\nSELECT *\nFROM staggingCustomer;\n\n\nINSERT INTO dbo.Product\nSELECT *\nFROM staggingProduct;\n\nINSERT INTO dbo.Store\nSELECT *\nFROM staggingStore;\n\n\nINSERT INTO dbo.Time\nSELECT *\nFROM staggingTime;\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicatedsqlpool",
+				"poolName": "dedicatedsqlpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
